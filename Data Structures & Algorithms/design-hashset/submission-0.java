@@ -1,24 +1,25 @@
 class MyHashSet {
-    private List<Integer> data;
+    private List<Integer> array;
+
+
     public MyHashSet() {
-        data = new ArrayList<>();
-        
+        array = new ArrayList<>();
     }
     
     public void add(int key) {
-        if(!data.contains(key)){
-            data.add(key);
+        if(!array.contains(key)){
+            array.add(key);
         }
+        
     }
     
     public void remove(int key) {
-        data.remove(Integer.valueOf(key));
+        array.remove(Integer.valueOf(key));
         
     }
     
     public boolean contains(int key) {
-        return data.contains(key);
-
+        return array.contains(key);
         
     }
 }
