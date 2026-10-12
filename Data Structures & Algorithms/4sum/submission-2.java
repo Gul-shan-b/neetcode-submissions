@@ -1,45 +1,32 @@
-class Solution {
+public class Solution {
     public List<List<Integer>> fourSum(int[] nums, int target) {
-        ArrayList<List<Integer>> res = new ArrayList<List<Integer>>();
-        int n = nums.length;
         Arrays.sort(nums);
-        if(nums == null|| nums.length ==0){
-            return res;
-        }
-        for(int i =0; i<n; i++){
-            for(int j= i+1; j<n; j++){
-                long target2 = (long)target- nums[i]-nums[j];
+        List<List<Integer>> res = new ArrayList<>();
+        int n = nums.length;
 
-                int left = j+1;
-                int right = n-1;
-                while(left<right){
-                    long sum = (long)nums[left] + nums[right];
-                    if(sum<target2){
+        for (int i = 0; i < n; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) continue;
+
+            for (int j = i + 1; j < n; j++) {
+                if (j > i + 1 && nums[j] == nums[j - 1]) continue;
+
+                int left = j + 1, right = n - 1;
+                while (left < right) {
+                    long sum = (long) nums[i] + nums[j] + nums[left] + nums[right];
+                    if (sum == target) {
+                        res.add(Arrays.asList(nums[i], nums[j], nums[left], nums[right]));
                         left++;
-                    }
-                    else if(sum> target2){
+                        right--;
+                        while (left < right && nums[left] == nums[left - 1]) left++;
+                        while (left < right && nums[right] == nums[right + 1]) right--;
+                    } else if (sum < target) {
+                        left++;
+                    } else {
                         right--;
                     }
-
-                    else{
-                        List<Integer> x = new ArrayList<>();
-                        x.add(nums[i]);
-                        x.add(nums[j]);
-                        x.add(nums[left]);
-                        x.add(nums[right]);
-                        res.add(x);
-
-                        while(left<right && nums[left]== x.get(2)) ++left;
-                        while(left<right && nums[right] == x.get(3)) -- right;
-                    }
-
                 }
-                while(j+1<n && nums[j+1]== nums[j]) ++j;
             }
-            while(i+1<n && nums[i+1]== nums[i]) ++i;
         }
         return res;
-
-        
     }
 }
