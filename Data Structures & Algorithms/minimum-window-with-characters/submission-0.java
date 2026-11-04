@@ -1,65 +1,58 @@
+
 class Solution {
     public String minWindow(String s, String t) {
-
-        
-        if (s.length() < t.length()) {
+        if(s.length() < t.length()) {
             return "";
         }
-        int[] count = new int[128];
 
-        
-        for (char c : t.toCharArray()) {
-            count[c]++;
-        }
+        HashMap<Character, Integer> map = new HashMap<>();
 
         int left = 0;
         int right = 0;
-
-        int required = t.length();
-
-        int minLength = Integer.MAX_VALUE;
+        int count = 0;
+        int min = Integer.MAX_VALUE;
         int start = 0;
 
-        while (right < s.length()) {
+        for(int i = 0; i < t.length(); i++) {
+            char ch = t.charAt(i);
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        }
 
+        while(right < s.length()) {
             char ch = s.charAt(right);
 
-            if (count[ch] > 0) {
-                required--;
+            if(map.containsKey(ch)) {
+                if(map.get(ch) > 0) {
+                    count++;
+                }
+                map.put(ch, map.get(ch) - 1);
             }
 
-            
-            count[ch]--;
-
-           
             right++;
 
-            while (required == 0) {
+            while(count == t.length()) {
+                int len = right - left;
 
-              
-                if (right - left < minLength) {
-                    minLength = right - left;
+                if(len < min) {
+                    min = len;
                     start = left;
                 }
 
-                char leftChar = s.charAt(left);
+                char leftchar = s.charAt(left);
 
-               
-                count[leftChar]++;
+                if(map.containsKey(leftchar)) {
+                    map.put(leftchar, map.get(leftchar) + 1);
 
-                
-                if (count[leftChar] > 0) {
-                    required++;
+                    if(map.get(leftchar) > 0) {
+                        count--;
+                    }
                 }
 
                 left++;
             }
         }
 
-        if (minLength == Integer.MAX_VALUE) {
-            return "";
-        }
-
-        return s.substring(start, start + minLength);
+        return min == Integer.MAX_VALUE ? "" :
+               s.substring(start, start + min);
     }
-} 
+}
